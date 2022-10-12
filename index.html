@@ -10,6 +10,7 @@
 <body>
     <style>
         .login-form {
+            font-family: sans-serif;
             display: flex;
             flex-flow: column nowrap;
             justify-content: center;
@@ -18,8 +19,10 @@
             padding: 20px 10px;
             /* border: solid 1px black; */
             /* border-radius: 10px; */
-            box-shadow: 2px 2px 4px 0px black;
+            box-shadow: 2px 2px 6px 0px grey;
             box-sizing: border-box;
+            background-color: rgb(255, 255, 255, 0.8);
+            
         }
 
         .login-form > div {
@@ -38,12 +41,36 @@
         #submit-button {
             width: 100%;
             font-size: 20px;
+            border: 1px solid darkblue;
+            border-radius: 0;
+            color: darkblue;
+            background-color: white;
+            transition: background-color 0.4s, color 0.4s;
+        }
+
+        #submit-button:hover {
+            background-color: darkblue;
+            color: white;
         }
 
         .message {
             font-size: 10px;
+            text-align: end;
         }
 
+        label, input {
+            color: green;
+            border-radius: 0;
+        }
+
+        input#username, input#password {
+            border: 1px solid green;
+        }
+
+        #username:focus, #password:focus {
+            border: 1px solid green;
+            outline: 1px solid green;
+        }
 
         /* Mobile */
         @media (max-width: 480px) {
@@ -71,30 +98,123 @@
 
         /* Tablets */
         @media (min-width: 481px) and (max-width: 768px) { 
+
+            .login-form {
+                height: 60%;
+                width: 70%;
+            }
             
         }
 
-        /* Tablets */
+        /* Laptop */
         @media (min-width: 769px) and (max-width: 1024px) { 
+
+            .login-form {
+                height: 50%;
+                width: 40%;
+            }
             
+        }
+
+        /* Larger than laptops */
+        @media (min-width: 1024px) { 
+
+            .login-form {
+                height: 50%;
+                width: 40%;
+            }
+
         }
     </style>
 <div style="width: 100%; margin: 0; display: flex; justify-content: center; align-items: center;">
     <form class="login-form">
         <div>
-            <label class="flex-item-1" for="username">Username:</label>
-            <input class="flex-item-2" type="text" id="username" name="username">
-            <span class="message">This is an error</span>
+            <label class="flex-item-1 username" for="username">Username</label>
+            <input class="flex-item-2 username" type="text" id="username" name="username">
+            <span class="message username"></span>
         </div>
         <div>
-            <label class="flex-item-1" for="password">Password:</label>
-            <input class="flex-item-2" type="password" id="password" name="password">
-            <span class="message">This is an error</span>
+            <label class="flex-item-1 password" for="password">Password</label>
+            <input class="flex-item-2 password" type="password" id="password" name="password">
+            <span class="message password"></span>
         </div>
         <div>
             <input id="submit-button" type="submit" value="Log In">
         </div>
     </form>
+
+    <script>
+        class LoginFormValidator {
+            constructor() {
+                
+                this.form = document.querySelector(".login-form");
+                this.fields = ["username", "password"];
+                this.initialize();
+                
+            };
+
+            initialize() {
+                this.validateOnEntry();
+                this.validateOnSubmit();
+            }
+
+            validateOnSubmit() {
+                
+                let self = this;
+                console.log("validate on submit");
+                console.log(this.form);
+                this.form.addEventListener("submit", event => {
+                    event.preventDefault();
+                    self.fields.forEach(field => {
+                        const input = document.getElementById(`${field}`);
+                        self.validateFields(input);
+                    });
+                });
+            }
+
+            validateOnEntry() {
+                let self = this;
+                this.fields.forEach(field => {
+                    const input = document.getElementById(`${field}`);
+                    input.addEventListener("input", event => {
+                        self.validateFields(input);
+                        console.log(input);
+                        console.log("field:" + field);
+                    });
+                });
+            }
+
+            validateFields(field) {
+                
+                if (field.id === "username") {
+                    if (field.value.trim() === "") {
+                        this.setStatus(field, `&#9888; Required`, "red");
+                    } else if (field.value.match(/[0-9]+/g)) {
+                        this.setStatus(field, `&#10004; Valid`, "green");
+                    } else {
+                        this.setStatus(field, `&#9888; Invalid Username`, "red");
+                    }
+                } else if (field.id === "password") {
+                    if (field.value.trim() === "") {
+                        this.setStatus(field, `&#9888; Required`, "red");
+                    } else if (field.value.match(/[0-9]+/g)) {
+                        this.setStatus(field, `&#10004; Valid`, "green");
+                    } else {
+                        this.setStatus(field, `&#9888; Invalid Password`, "red");
+                    }
+                }
+            }
+
+            setStatus(field, status, color) {
+                const span = document.querySelector(`span.${field.id}`);
+                span.innerHTML = status;
+                span.style.color = color;
+            }
+        }
+
+
+        const ob = new LoginFormValidator();
+    </script>
 
 </div>
     
