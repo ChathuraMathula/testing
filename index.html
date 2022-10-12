@@ -15,7 +15,8 @@
             justify-content: center;
             width: 100%;
             height: 100%;
-            font-size: 18px;
+            padding: 1%;
+            border: solid 1px black;
         }
 
         .login-form > div {
@@ -23,10 +24,9 @@
             display: flex;
             justify-content: center;
             flex-flow: column;
-            font-size: 20px;
         }
 
-        .flex-item-right {
+        .flex-item-2, .flex-item-1 {
             line-height: 20px;
             font-size: 18px;
         }
@@ -52,19 +52,24 @@
             
         }
     </style>
-
+<div style="height: 250px; width: 300px; margin: 10% auto; position: relative;">
     <form class="login-form">
         <div>
-            <label class="flex-item-left" for="username">Username:</label>
-            <input class="flex-item-right" type="text" id="username" name="username">
+            <label class="flex-item-1" for="username">Username:</label>
+            <input class="flex-item-2" type="text" id="username" name="username">
+            <p class="message">This is an error</p>
         </div>
         <div>
-            <label class="flex-item-left" for="password">Password:</label>
-            <input class="flex-item-right" type="password" id="password" name="password">
+            <label class="flex-item-1" for="password">Password:</label>
+            <input class="flex-item-2" type="password" id="password" name="password">
+            <p class="message">This is an error</p>
         </div>
         <div>
             <input id="submit-button" type="submit" value="Log In">
         </div>
     </form>
+
+</div>
+    
 </body>
 </html>
