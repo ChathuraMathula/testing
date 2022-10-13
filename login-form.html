@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login-Form</title>
+</head>
+<body>
+    <style>
+        .modal {
+            position: fixed;
+            box-sizing: border-box;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            display: block;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .container {
+            font-family: sans-serif;
+            box-sizing: border-box;
+            position: relative;
+            display: block;
+            padding: 10px;
+            background-color: white;
+            width: 100%;
+            animation-name: zoomInAnimation;
+            animation-duration: 0.4s;
+        }
+
+        .innerContainer {
+            padding: 10px;
+            border: 1px solid rgb(188, 194, 190);
+        }
+
+        .imgContainer {
+            position: relative;
+        }
+
+        .avatar {
+            background-color: green;
+            height: 100px;
+            width: 100px;
+            border-radius: 50%;
+            margin: auto;
+        }
+
+        label {
+            font-size: large;
+        }
+
+        input[type="text"], input[type="password"] {
+            font-size: medium;
+            box-sizing: border-box;
+            width: 100%;
+            margin: 5px 0 0 0;
+            padding: 12px 10px;
+            border: 1px solid rgb(188, 194, 190);
+        }
+
+        input[type="submit"] {
+            font-size: large;
+            width: 100%;
+            height: 30px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 0;
+        }
+
+        .message {
+            display: block;
+            margin-bottom: 15px;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: end;
+            visibility: hidden;
+            font-size: smaller;
+        }
+
+        @keyframes zoomInAnimation {
+            from {transform: scale(0);}
+            to {transform: scale(1);}
+        }
+
+    </style>
+
+    <div class="modal">
+        <div class="container">
+            <div class="innerContainer">
+                <div class="imgContainer">
+                    <div class="avatar"></div>
+                </div>
+                <form id="login_form">
+                    <label for="username"><b>Username</b></label>
+                    <input type="text" id="username" name="username" placeholder="Enter Username">
+                    <span class="message username">Warning Message</span>
+                    <br>
+                    <label for="password"><b>Password</b></label>
+                    <input type="password" id="password" name="password" placeholder="Enter Password">
+                    <span class="message password">Warning Message</span>
+                    <input type="submit" value="Log In">
+                </form>
+            </div>
+        </div>        
+    </div>
+
+    
+    <script>
+        class LoginFormValidator {
+            constructor() {
+                
+                this.form = document.querySelector("#login_form");
+                this.fields = ["username", "password"];
+                this.initialize();
+                
+            };
+
+            initialize() {
+                this.validateOnEntry();
+                this.validateOnSubmit();
+            }
+
+            validateOnSubmit() {
+                
+                let self = this;
+                console.log("validate on submit");
+                console.log(this.form);
+                this.form.addEventListener("submit", event => {
+                    event.preventDefault();
+                    self.fields.forEach(field => {
+                        const input = document.getElementById(`${field}`);
+                        self.validateFields(input);
+                    });
+                });
+            }
+
+            validateOnEntry() {
+                let self = this;
+                this.fields.forEach(field => {
+                    const input = document.getElementById(`${field}`);
+                    input.addEventListener("input", event => {
+                        self.validateFields(input);
+                        console.log(input);
+                        console.log("field:" + field);
+                    });
+                });
+            }
+
+            validateFields(field) {
+                
+                if (field.id === "username") {
+                    if (field.value.trim() === "") {
+                        this.setStatus(field, `&#9888; Required`, "red");
+                    } else if (/[0-9]+/g.test(field.value)) {
+                        this.setStatus(field, `&#10004; Valid`, "green");
+                    } else {
+                        this.setStatus(field, `&#9888; Invalid Username`, "red");
+                    }
+                } else if (field.id === "password") {
+                    if (field.value.trim() === "") {
+                        this.setStatus(field, `&#9888; Required`, "red");
+                    } else if (/[0-9]+/g.test(field.value)) {
+                        this.setStatus(field, `&#10004; Valid`, "green");
+                    } else {
+                        this.setStatus(field, `&#9888; Invalid Password`, "red");
+                    }
+                }
+            }
+
+            setStatus(field, status, color) {
+                const span = document.querySelector(`span.${field.id}`);
+                span.innerHTML = status;
+                span.style.color = color;
+                span.style.visibility = "visible";
+            }
+        }
+
+
+        const ob = new LoginFormValidator();
+    </script>
+</body>
+</html>
